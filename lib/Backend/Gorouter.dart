@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:student_app/Backend/components/pdfview.dart';
 import 'package:student_app/Backend/components/video_player_page.dart';
+import 'package:student_app/pages/HomeworkDetailPage.dart';
 import 'package:student_app/pages/Splashscreen.dart';
 import 'package:student_app/pages/detailedlessonpage.dart';
 import 'package:student_app/pages/homepage.dart';
@@ -21,37 +22,41 @@ final GoRouter router = GoRouter(
     GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
 
     // 🟩 New routes for Subject → Chapter → PDF
- 
-
     GoRoute(
       path: '/chapters',
-      builder: (context, state) => ChapterPage(subjectData: state.extra as Map),
+      builder: (context, state) {
+        final subject = state.extra as Map<String, dynamic>;
+        return ChapterPage(subjectData: subject);
+      },
     ),
+    GoRoute(
+      path: '/homework-detail',
+      builder: (context, state) {
+        final hw = state.extra as Map<String, dynamic>;
+        return HomeworkDetailPage(homeworkData: hw);
+      },
+    ),
+    GoRoute(
+      path: '/pdf',
+      builder: (context, state) {
+        final data = state.extra as Map;
 
- GoRoute(
-  path: '/pdf',
-  builder: (context, state) {
-    final data = state.extra as Map;
+        return PdfViewerPage(
+          pdfPath: data["url"] ?? "", // 👈 NOTE: url not file
+          title: data["title"] ?? "",
+        );
+      },
+    ),
+    GoRoute(
+      path: '/video',
+      builder: (context, state) {
+        final data = state.extra as Map;
 
-    return PdfViewerPage(
-      pdfPath: data["url"] ?? "",   // 👈 NOTE: url not file
-      title: data["title"] ?? "",
-    );
-  },
-),
-GoRoute(
-  path: '/video',
-  builder: (context, state) {
-    final data = state.extra as Map;
-
-    return VideoPlayerPage(
-      videoUrl: data["url"] ?? "",
-      title: data["title"] ?? "",
-    );
-  },
-),
-
-
-
+        return VideoPlayerPage(
+          videoUrl: data["url"] ?? "",
+          title: data["title"] ?? "",
+        );
+      },
+    ),
   ],
 );

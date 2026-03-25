@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -42,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen>
     final token = await storage.read(key: "token");
     final expiry = await storage.read(key: "token_expiry");
 
-    // ❌ No token → Login
     if (token == null || expiry == null) {
       if (!mounted) return;
       context.go('/login');
@@ -52,7 +52,6 @@ class _SplashScreenState extends State<SplashScreen>
     try {
       final expiryDate = DateTime.parse(expiry);
 
-      // ❌ Expired → clear + Login
       if (DateTime.now().isAfter(expiryDate)) {
         await storage.deleteAll();
         if (!mounted) return;
@@ -60,11 +59,9 @@ class _SplashScreenState extends State<SplashScreen>
         return;
       }
 
-      // ✅ Valid Token → Homepage
       if (!mounted) return;
       context.go('/Homepage');
     } catch (e) {
-      // ❌ Invalid date format → force logout
       await storage.deleteAll();
       if (!mounted) return;
       context.go('/login');
@@ -87,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 8.h),
+            SizedBox(height: 10.h), // Slightly more top padding
 
             FadeTransition(
               opacity: _fadeAnimation,
@@ -96,18 +93,19 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   children: [
                     Text(
-                      "Student App",
-                      style: TextStyle(
+                      "Sri Sai Tuition Centre", // ⭐ Updated Name
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
                           color: Colors.white,
-                          fontSize: 24.sp,
+                          fontSize: 26.sp, // Increased to 26 (from 24)
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 1.h),
+                    SizedBox(height: 1.5.h),
                     Text(
                       "A better way to manage your lessons",
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.white70,
-                        fontSize: 14.sp,
+                        fontSize: 16.sp, // Increased to 16 (from 14)
                       ),
                     ),
                   ],
@@ -120,15 +118,15 @@ class _SplashScreenState extends State<SplashScreen>
               child: ScaleTransition(
                 scale: _scaleAnimation,
                 child: Container(
-                  height: 30.h,
-                  width: 70.w,
+                  height: 32.h, // Adjusted slightly for balance
+                  width: 75.w,
                   decoration: BoxDecoration(
                     color: Colors.white10,
-                    borderRadius: BorderRadius.circular(3.w),
+                    borderRadius: BorderRadius.circular(5.w),
                     border: Border.all(color: Colors.white24, width: 0.5),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(3.w),
+                    borderRadius: BorderRadius.circular(5.w),
                     child: Image.asset(
                       'assets/images/studentapp1.png',
                       fit: BoxFit.cover,
@@ -139,16 +137,16 @@ class _SplashScreenState extends State<SplashScreen>
             ),
 
             Padding(
-              padding: EdgeInsets.only(bottom: 5.h),
+              padding: EdgeInsets.only(bottom: 6.h),
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: ScaleTransition(
                   scale: _scaleAnimation,
                   child: Text(
-                    "Students’s platform",
-                    style: TextStyle(
+                    "Empowering Students", // More professional footer
+                    style: GoogleFonts.poppins(
                       color: Colors.white70,
-                      fontSize: 15.sp,
+                      fontSize: 17.sp, // Increased to 17 (from 15)
                     ),
                   ),
                 ),
